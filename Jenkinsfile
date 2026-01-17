@@ -101,16 +101,3 @@ pipeline {
         }
     }
 }
-
-**Save:** `Ctrl + X`, `Y`, `Enter`
-
-### **📖 Understanding the Pipeline:**
-
-**Pipeline Structure:**
-```
-Pipeline
-├── Stage 1: Cleanup      (Remove old stuff)
-├── Stage 2: Build        (Create Docker images)
-├── Stage 3: Test         (Run automated tests)
-├── Stage 4: Deploy       (Start containers)
-└── Stage 5: Verify       (Check if working)
