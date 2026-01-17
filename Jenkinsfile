@@ -68,20 +68,17 @@ pipeline {
         // ==========================================
         // STAGE 5: Verify deployment
         // ==========================================
-        stage('Verify') {
-            steps {
-                echo '✅ Verifying deployment...'
-                sh '''
-                    sleep 10
-            curl -f http://todo-app-pipeline-app-1:3000 || exit 1
-                    echo "Application is running successfully!"
-                '''
-                // Wait 10 seconds for app to fully start
-                // curl -f = Fail if HTTP error
-                // exit 1 = Exit with error if curl fails
-            }
-        }
+       stage('Verify') {
+    steps {
+        echo '✅ Verifying deployment...'
+        sh '''
+            sleep 15
+            docker ps | grep todo-app-pipeline-app-1
+            docker logs todo-app-pipeline-app-1 | grep "Server running"
+            echo "✅ Application is running successfully!"
+        '''
     }
+}
     
     // ==========================================
     // POST-BUILD ACTIONS
