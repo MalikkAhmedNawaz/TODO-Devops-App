@@ -101,7 +101,6 @@ pipeline {
         }
     }
 }
-```
 
 **Save:** `Ctrl + X`, `Y`, `Enter`
 
