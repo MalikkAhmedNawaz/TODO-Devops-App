@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  jenkins:
+    image: jenkins/jenkins:lts
+    privileged: true
+    user: root
+    ports:
+      - "8081:8080"      # Jenkins web interface
+      - "50000:50000"    # Jenkins agent port
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      # Persists Jenkins configuration
+      
+      - /var/run/docker.sock:/var/run/docker.sock
+      # Allows Jenkins to control Docker on your PC
+      # This is called "Docker-in-Docker" access
+    
+    environment:
+      - JAVA_OPTS=-Djenkins.install.runSetupWizard=false
+      # Skip setup wizard (we'll configure manually)
+
+volumes:
+  jenkins_home:

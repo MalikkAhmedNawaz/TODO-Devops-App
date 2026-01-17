@@ -1,0 +1,68 @@
+# ========================================
+# DOCKER COMPOSE - Orchestrating multiple containers
+# ========================================
+
+version: '3.8'  # Docker Compose file format version
+
+services:  # Services = Containers we want to run
+
+  # ==========================================
+  # SERVICE 1: Our Todo Application
+  # ==========================================
+  app:
+    build: .  # Build from Dockerfile in current directory
+    
+    ports:
+      - "3000:3000"  
+      # Format: "HOST_PORT:CONTAINER_PORT"
+      # Left side (3000) = Port on your PC
+      # Right side (3000) = Port inside container
+      # You access app at localhost:3000
+    
+    environment:
+      # Environment variables passed to container
+      - DB_HOST=postgres       # Database hostname
+      - DB_USER=todouser       # Database username
+      - DB_PASSWORD=todopass   # Database password
+      - DB_NAME=tododb         # Database name
+    
+    depends_on:
+      - postgres
+      # Wait for postgres service to start first
+      # App needs database to be ready!
+    
+    restart: unless-stopped
+      # If container crashes, automatically restart it
+      # unless-stopped = restart always, except when manually stopped
+
+  # ==========================================
+  # SERVICE 2: PostgreSQL Database
+  # ==========================================
+  postgres:
+    image: postgres:15-alpine
+    # Use pre-built PostgreSQL image from Docker Hub
+    # alpine = small, efficient version
+    
+    environment:
+      # PostgreSQL configuration
+      - POSTGRES_USER=todouser      # Creates this user
+      - POSTGRES_PASSWORD=todopass  # Sets this password
+      - POSTGRES_DB=tododb          # Creates this database
+    
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      # Volume = persistent storage
+      # Left: volume name (created below)
+      # Right: where PostgreSQL stores data inside container
+      # This ensures data survives container restarts!
+    
+    restart: unless-stopped
+
+# ==========================================
+# VOLUMES - Persistent storage definitions
+# ==========================================
+volumes:
+  postgres_data:
+    # Named volume for database data
+    # Docker manages this storage
+    # Even if you delete containers, this data persists!
